@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./List.module.scss";
 import { CreateToDo } from "./CreateToDo";
 import uid from "uid";
+import cn from "classnames";
 
 interface ListState {}
 
@@ -9,6 +10,13 @@ const initialTodos: TodoItem[] = [
   { id: uid(), task: "Get ready to go to work" },
   { id: uid(), task: "Go to work reunion" }
 ];
+
+const mapped = initialTodos.reduce((acc, todo) => {
+  return { ...acc, [todo.id]: todo };
+}, {});
+
+console.log(mapped);
+
 
 export function List() {
   // Componente para depois retornar na minha lista
@@ -37,11 +45,10 @@ export function List() {
   const deleteTodo = (id: string) => {
     // se der truth ele fica se for falso ele remove
     // o q ta a ser iterado tem q ser diferente
-   setTodos(
-     todos.filter(todo => todo.id !== id)
-   );
+    setTodos(todos.filter(todo => todo.id !== id));
   };
 
+  // Map abaixo - por cada todo q tenho queremos transformar num todo component
   return (
     <div className={styles.ListContainer}>
       <h1>To do List</h1>
@@ -50,9 +57,8 @@ export function List() {
           <Todo
             key={todo.id}
             todo={todo}
-            toggleTodo={() => toggleTodo(todo.id)}
-            deleteTodo={() => deleteTodo(todo.id) }
-
+            toggleTodo={toggleTodo} // {() => toggleTodo(todo.id)}
+            deleteTodo={deleteTodo}
           /> //index substituido por todo.id
         ))}
         <CreateToDo onCreate={handleCreate} />
@@ -65,13 +71,12 @@ export interface TodoItem {
   id: string;
   task: string;
   completed?: boolean;
-  deleted?:boolean;
 }
 
 interface TodoProps {
   todo: TodoItem;
   toggleTodo: (id: string) => void;
-  deleteTodo:(id: string) => void;
+  deleteTodo: (id: string) => void;
 }
 
 const Todo = ({ todo, toggleTodo, deleteTodo }: TodoProps) => (
@@ -82,6 +87,14 @@ const Todo = ({ todo, toggleTodo, deleteTodo }: TodoProps) => (
       onChange={() => toggleTodo(todo.id)}
     />
     {todo.task}
+    <button
+      className={cn(styles.completed, {
+        [styles.completed]: todo.completed
+      })}
+      onClick={() => toggleTodo(todo.id)}
+    >
+      {!todo.completed ? "Completed" : "Undo"}
+    </button>
     <button onClick={() => deleteTodo(todo.id)}>Delete</button>
   </p>
 );
