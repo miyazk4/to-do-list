@@ -12,7 +12,7 @@
     "@types/react-dom": "^16.9.5",
     "classnames": "^2.2.6",
     "node": "^13.10.1",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",
@@ -42,6 +42,6 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",
-    "node-sass": "^4.13.1"
+    "node-sass": "^7.0.0"
   }
 }
